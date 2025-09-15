@@ -12,20 +12,22 @@
     {% comment %} add + icon {% endcomment %}
   </a>
 
-  <div class="container mx-auto flex flex-col gap-6">
+  <div class="container row gap-3">
     {% for vibe in vibes %}
-      <div class="card lg:card-side bg-base-100 shadow-sm">
+      <div class="card">
 
         <!-- Media carousel -->
+        {% if vibe.media.all %}
         <figure class="w-1/3">
           <div id="carousel{{ forloop.counter }}" class="carousel slide" 
           data-bs-interval="false">
-            <div class="carousel-inner">
-              {% for media in vibe.media.all %}
+
+            {% for media in vibe.media.all %}
+              <div class="carousel-inner">
                 <div class="carousel-item {% if forloop.first %} active {% endif %}">
                   {% if ".mp4" in media.file.url|lower or ".webm" in media.file.url|lower or ".ogg" in media.file.url|lower %}
                     <!-- Video -->
-                    <video controls autoplay class="d-block w-100">
+                    <video controls class="d-block w-100">
                       <source src="{{ media.file.url }}">
                       Your browser does not support the video tag.
                     </video>
@@ -34,19 +36,27 @@
                     <img src="{{ media.file.url }}" class="d-block w-100" />
                   {% endif %}
                 </div>
-              {% endfor %}
-            </div>
-
-            <a class="carousel-control-prev" href="#carousel{{ forloop.counter }}" role="button" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carousel{{ forloop.counter }}" role="button" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </a>
+            {% endfor %}
           </div>
+
+          <a class="carousel-control-prev" href="#carousel{{ forloop.counter }}" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carousel{{ forloop.counter }}" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+          
         </figure>
+        {% endif %}
+
+        <div class="card-body">
+          <h5 class="card-title">{{vibe.user.username}}</h5>
+          <p class="card-text">{{vibe.text}}</p>
+          <a href="{% url 'vibe_edit' vibe.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'vibe_delete' vibe.id %}" class="btn btn-danger">Delete</a>
+        </div>
 
       </div>
     {% endfor %}

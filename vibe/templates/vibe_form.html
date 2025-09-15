@@ -5,5 +5,66 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="text-2xl">test content heading</h1>
+  <h1 class="text-2xl">
+    {% if vibe_form.instance.pk %} Change Vibe {% else %} Add Vibe {% endif %}
+  </h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Main Vibe form -->
+    {{ vibe_form.as_p }}
+
+    <h3>Upload Media (Max 5 files)</h3>
+
+    <!-- Required management form for formset -->
+    {{ formset.management_form }}
+
+    <!-- Loop exactly 5 forms -->
+    {% for form in formset %}
+        <div class="media-input">
+            {{ form.file.label_tag }} {{ form.file }}
+        </div>
+    {% endfor %}
+
+    <button type="submit">Save Vibe</button>
+</form>
+
+
+
+{% comment %} <script>
+  const formsetArea = document.getElementById("formset-area");
+  const addBtn = document.getElementById("add-form");
+  const totalForms = document.getElementById("id_form-TOTAL_FORMS");
+
+  addBtn.addEventListener("click", function() {
+    let formCount = formsetArea.querySelectorAll(".media-form").length;
+
+    if (formCount < 5) { // Max 5 media
+      let newForm = formsetArea.querySelector(".media-form").cloneNode(true);
+
+      // Clear old values
+      newForm.querySelector("input[type=file]").value = "";
+      if (newForm.querySelector("input[type=checkbox]")) {
+        newForm.querySelector("input[type=checkbox]").checked = false;
+      }
+
+      // Update form index correctly
+      const regex = /form-(\d+)-/g;
+      newForm.innerHTML = newForm.innerHTML.replace(regex, `form-${formCount}-`);
+
+      // Append to table
+      formsetArea.appendChild(newForm);
+
+      // Update TOTAL_FORMS
+      totalForms.value = formCount + 1;
+    } else {
+      alert("Maximum 5 media files allowed.");
+    }
+  });
+</script> {% endcomment %}
+
+
+
+
 {% endblock %}
