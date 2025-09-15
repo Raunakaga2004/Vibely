@@ -13,7 +13,7 @@ class Vibe(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
   
   def clean(self):
-    if self.media.count() > 5:
+    if self.pk and self.media.count() > 5:
         raise ValidationError("You can upload at most 5 media files (photos/videos).")
 
   def __str__(self):

@@ -15,7 +15,7 @@ def vibe_list(request) :
   return render(request, 'vibe_list.html', {'vibes' : vibes})
 
 @login_required # only for logged in users
-def create_vibe(request):
+def vibe_create(request):
   if request.method == "POST":
     vibe_form = VibeForm(request.POST)
     formset = VibeMediaFormSet(request.POST, request.FILES)
@@ -33,7 +33,7 @@ def create_vibe(request):
     vibe_form = VibeForm()
     formset = VibeMediaFormSet()
 
-  return render(request, "create_vibe.html", {
+  return render(request, "vibe_form.html", {
     "vibe_form": vibe_form,
     "formset": formset,
   })
@@ -54,7 +54,7 @@ def vibe_edit(request, vibe_id) :
   else :
     vibe_form = VibeForm(instance=vibe)
     formset = VibeMediaFormSet(instance=vibe)
-  return render(request, "create_vibe.html", {
+  return render(request, "vibe_form.html", {
     "vibe_form": vibe_form,
     "formset": formset,
   })
